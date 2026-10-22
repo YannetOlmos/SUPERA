@@ -1,0 +1,5 @@
+# Copia este archivo como .env (local) y, en Vercel, crea las mismas dos variables.
+# Ambos valores son públicos por diseño: la seguridad la dan las políticas de la base.
+# NUNCA pongas aquí la llave secreta (service_role).
+VITE_SUPABASE_URL=https://pctauwpxgbaufvdpcbfd.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_F1p3H9ITj5e5aBcSw7abyw_guKK5g7D
