@@ -1,8 +1,13 @@
--- Datos de prueba para ver la pantalla Evaluar. Ejecutar UNA vez en Supabase > SQL Editor.
--- 1) Primero crea tu usuario en Authentication > Users (correo y contraseña; marca "Auto Confirm User").
--- 2) Cambia el correo de abajo por el que creaste y ejecuta todo el script.
--- Crea 5 solicitudes en borrador a nombre de ese usuario (que queda como analista).
--- Para borrar estos datos después: delete from solicitudes where cultivo like 'PRUEBA%'; (y sus acreditados TEST%).
+-- Datos de prueba (5 solicitudes en borrador). Ejecutar UNA vez en Supabase > SQL Editor.
+-- 1) El usuario debe existir en Authentication > Users.
+-- 2) Cambia el correo de abajo y ejecuta todo el script.
+-- Si el usuario ya tiene perfil (gerente, analista...) se respeta; si no, se crea como analista.
+-- Para borrar estos datos después (en el SQL Editor):
+--   delete from public.evaluaciones_historial where solicitud_id in (select id from public.solicitudes where cultivo like 'PRUEBA%');
+--   delete from public.bitacora where solicitud_id in (select id from public.solicitudes where cultivo like 'PRUEBA%');
+--   delete from public.decisiones where solicitud_id in (select id from public.solicitudes where cultivo like 'PRUEBA%');
+--   delete from public.solicitudes where cultivo like 'PRUEBA%';
+--   delete from public.acreditados where rfc like 'TEST%';
 
 do $$
 declare
@@ -23,7 +28,7 @@ begin
     raise exception 'No existe un usuario con el correo %. Créalo primero en Authentication > Users.', v_email;
   end if;
   insert into public.perfiles (id, nombre, rol) values (v_id, 'Analista de prueba', 'analista')
-    on conflict (id) do update set rol = 'analista';
+    on conflict (id) do nothing;
 
   for c in select * from jsonb_array_elements(casos) loop
     insert into public.acreditados (nombre, rfc, analista_id)
